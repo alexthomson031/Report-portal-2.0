@@ -59,4 +59,19 @@ public class ChangeOfDate {
                 .shouldBe(visible, Duration.ofSeconds(7))
                 .shouldHave(exactText("Встреча успешно запланирована на " + reDate));
     }
+
+    @Test
+    void loginErrorLetter() {
+        $("[data-test-id='city'] input").setValue(registrationInfo.getCity());
+        $("[data-test-id='date'] input").doubleClick().sendKeys(Keys.BACK_SPACE);
+        String date = DataGenerator.getDate(3);
+        $("[data-test-id='date'] input").setValue(date);
+        $("[data-test-id=name] input").setValue(DataGenerator.getName());
+        $("[data-test-id=phone] input").setValue(registrationInfo.getPhoneNumber());
+        $("[data-test-id=agreement]").click();
+        $$("button").find(exactText("Запланировать")).click();
+        $("[data-test-id=name] .input__sub")
+                .shouldBe(visible, Duration.ofSeconds(7))
+                .shouldBe(exactText("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы."));
+    }
 }
